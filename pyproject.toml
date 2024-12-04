@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.autopep8]
+max_line_length = 120
+select = "E101,E111,E112,E113,E114,E115,E116,E117,E203,E222,E223,E224,E225,E226,E227,E228,E231,E242,E261,E266,E271,E272,E273,E274,E275,E301,E303,E304,E401,E502,E701,E702,E703,E704,E711,E712,E713,E714,E721,E741,E742,E743,E9,W1,W2,W3,W6"
+in-place = true
+recursive = true
+aggressive = 2
+exclude = "**/secrets/*"
+
+[tool.ruff]
+line-length = 120
+select = ["E","F406","F5","F6","F7","F9","N804","N805","N999","UP","B","COM","C4","D201","D204","D209","D211","D213","D419","DJ","G","PIE","RSE","SIM101","SIM110","SIM20","SIM21","SIM401","PLE","PLW","S113"]
+ignore = ["E402","E501","F60","UP031","B007","B020","B023","B904","B905","C408","PT004","PT006","PT011","PT018","DJ008","PLW2901", "PLW0602"]
+fixable = ["E","F5","F6","F7","F9","D","UP","B","COM","C4","D","RSE","SIM"]
+unfixable = []
+target-version = "py311"

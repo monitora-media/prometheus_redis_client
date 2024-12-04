@@ -1,0 +1,11 @@
+include *.pip
+
+recursive-include prometheus_redis_client *
+recursive-include tests_prometheus_redis_client *
+
+global-exclude local.py
+global-exclude .coverage
+global-exclude nosetests.xml
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude .DS_Store
