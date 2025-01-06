@@ -14,7 +14,10 @@ class MetricsHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         # neeed to import this on the fly to get fresh stuff
-        importlib.import_module(self.metrics_module)
+        try:
+            importlib.import_module(self.metrics_module)
+        except ImportError as e:
+            raise ImportError(f'Could not import the metrics module "{self.metrics_module}". Are you sure it exists?') from e
 
         self.send_response(200)
         self.send_header('Content-Type', 'text/plain')
