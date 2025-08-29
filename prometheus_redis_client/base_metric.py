@@ -48,7 +48,7 @@ class DocRepresentation(BaseRepresentation):
 class WithLabels:
     """Wrap functions and put 'labels' argument to it."""
 
-    __slot__ = (
+    __slots__ = (
         'instance',
         'labels',
         'wrapped_functions_names',
