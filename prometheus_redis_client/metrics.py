@@ -52,6 +52,9 @@ class Metric(BaseMetric):
     def cleanup(self) -> None:
         """Perform optional cleanup of the metric."""
 
+    def remove(self) -> None:
+        """Removes metric from the registry."""
+
 
 class Counter(Metric):
     """
@@ -62,7 +65,7 @@ class Counter(Metric):
     """
 
     type = 'counter'
-    wrapped_functions_names = ('inc', 'set')
+    wrapped_functions_names = ('inc', 'set', 'remove')
 
     def inc(self, value: int = 1, labels: dict[str, str | int] | None = None) -> None:
         """Increment the counter by the given value."""
@@ -103,6 +106,23 @@ class Counter(Metric):
         pipeline = self.registry.redis.pipeline()
         pipeline.sadd(group_key, metric_key)
         pipeline.set(metric_key, int(value))
+
+        return pipeline.execute()[1]
+
+    def remove(self, labels: dict[str, str | int] | None = None) -> None:
+        """Removes metric from registry."""
+        labels = labels or {}
+        self._check_labels(labels)
+        self._remove(labels)
+
+    @_silent_wrapper
+    def _remove(self, labels: dict):
+        group_key = self.get_metric_group_key()
+        metric_key = self.get_metric_key(labels)
+
+        pipeline = self.registry.redis.pipeline()
+        pipeline.srem(group_key, metric_key)
+        pipeline.delete(metric_key)
 
         return pipeline.execute()[1]
 
