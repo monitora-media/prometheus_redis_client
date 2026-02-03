@@ -2,13 +2,10 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v[0-9]+.*'
   create:
 
 jobs:
   build:
-    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
     name: Build distributions
     runs-on: ubuntu-latest
     steps:
@@ -32,6 +29,7 @@ jobs:
           path: dist/
 
   release:
+    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
     name: Create GitHub Release
     needs: build
     runs-on: ubuntu-latest
