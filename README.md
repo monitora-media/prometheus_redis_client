@@ -28,3 +28,7 @@ class Command(MediaboardBaseCommand):
         http_server.run_server(options['bind_ip'], options['bind_port'], 'monitora.metrics')
 
 ```
+
+### Releasing
+
+Create a tag vX.Y.Z. The Github release will be created automatically by a GH action.
