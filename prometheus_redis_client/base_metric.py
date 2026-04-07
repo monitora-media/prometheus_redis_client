@@ -117,7 +117,7 @@ class BaseMetric:
         """Encode labels to base64 string in UTF8 bytes."""
         return base64.b64encode(json.dumps(labels, sort_keys=True).encode('utf-8'))
 
-    def unpack_labels(self, labels: bytes) -> dict[str, str | int]:
+    def unpack_labels(self, labels: bytes | str) -> dict[str, str | int]:
         """Decode base64 string to labels dict."""
         return json.loads(base64.b64decode(labels).decode('utf-8'))
 

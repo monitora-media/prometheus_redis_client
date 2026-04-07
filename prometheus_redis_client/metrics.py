@@ -6,9 +6,9 @@ import threading
 from collections.abc import Callable, Sequence
 from functools import partial, wraps
 
-from prometheus_redis_client. base_metric import BaseMetric, MetricRepresentation
+from prometheus_redis_client.base_metric import (BaseMetric,
+                                                 MetricRepresentation)
 from prometheus_redis_client.helpers import timeit
-
 
 logger = logging.getLogger(__name__)
 
@@ -33,21 +33,31 @@ class Metric(BaseMetric):
         """
         redis = self.registry.redis
         group_key = self.get_metric_group_key()
-        members = redis.smembers(group_key)
+        members = list(redis.smembers(group_key))
         results: list[MetricRepresentation] = []
 
-        for metric_key in members:
-            name, packed_labels = self.parse_metric_key(metric_key)
-            labels = self.unpack_labels(packed_labels)
-            value = redis.get(metric_key)
+        with redis.pipeline() as pipe:
+            metrics = []
+            for metric_key in members:
+                name, packed_labels = self.parse_metric_key(metric_key)
+                pipe.get(metric_key)
+                labels = self.unpack_labels(packed_labels)
+                metrics.append(MetricRepresentation(name=name, labels=labels, value=None))
 
-            if value is None:
-                redis.srem(group_key, metric_key)
-                continue
+            values = pipe.execute()
 
-            results.append(MetricRepresentation(name=name, labels=labels, value=value.decode('utf-8')))
+            for metric, value, metric_key in zip(metrics, values, members):
+                if isinstance(value, bytes):  # If HiRedis is installed, the decode is done automatically
+                    value = value.decode('utf-8')
 
-        return results
+                if value is None:
+                    pipe.srem(group_key, metric_key)
+                else:
+                    metric.value = value
+                    results.append(metric)
+
+            pipe.execute()
+            return results
 
     def cleanup(self) -> None:
         """Perform optional cleanup of the metric."""
