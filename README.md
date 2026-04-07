@@ -32,3 +32,5 @@ class Command(MediaboardBaseCommand):
 ### Releasing
 
 Create a tag vX.Y.Z. The Github release will be created automatically by a GH action.
+
+If you want to have control over release notes, create a release (and a tag) from the Github UI.

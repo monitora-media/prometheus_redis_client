@@ -64,27 +64,3 @@ jobs:
           else
             gh release create "${{ github.ref_name }}" dist/* --generate-notes
           fi
-
-  post-release:
-    name: Bump to dev version
-    needs: release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: master
-
-      - name: Set dev version and push
-        env:
-          RELEASE_TAG: ${{ github.ref_name }}
-        run: |
-          VERSION="${RELEASE_TAG#v}"
-          sed -i "s/^version=.*/version=${VERSION}.dev0/" setup.cfg
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add setup.cfg
-          git commit -m "Bump version to ${VERSION}.dev0"
-          git push
