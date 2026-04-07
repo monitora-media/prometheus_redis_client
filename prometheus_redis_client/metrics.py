@@ -33,7 +33,7 @@ class Metric(BaseMetric):
         """
         redis = self.registry.redis
         group_key = self.get_metric_group_key()
-        members = redis.smembers(group_key)
+        members = list(redis.smembers(group_key))
         results: list[MetricRepresentation] = []
 
         with redis.pipeline() as pipe:
