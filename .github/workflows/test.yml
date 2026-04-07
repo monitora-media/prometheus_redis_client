@@ -36,7 +36,7 @@ jobs:
             --junitxml=junit.xml | tee pytest-coverage.txt
 
       - name: Pytest coverage comment
-        if: always()
+        if: github.event_name == 'pull_request'
         uses: MishaKav/pytest-coverage-comment@v1.7.1
         with:
           pytest-coverage-path: pytest-coverage.txt

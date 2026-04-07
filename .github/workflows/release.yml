@@ -1,5 +1,7 @@
 name: Release
 
+# When a new tag with the format v* is pushed, release a new version to GitHub Releases.
+
 on:
   push:
   create:
