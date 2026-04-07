@@ -12,8 +12,10 @@ exclude = "**/secrets/*"
 
 [tool.ruff]
 line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
 select = ["E","F406","F5","F6","F7","F9","N804","N805","N999","UP","B","COM","C4","D201","D204","D209","D211","D213","D419","DJ","G","PIE","RSE","SIM101","SIM110","SIM20","SIM21","SIM401","PLE","PLW","S113"]
 ignore = ["E402","E501","F60","UP031","B007","B020","B023","B904","B905","C408","PT004","PT006","PT011","PT018","DJ008","PLW2901", "PLW0602"]
 fixable = ["E","F5","F6","F7","F9","D","UP","B","COM","C4","D","RSE","SIM"]
 unfixable = []
-target-version = "py311"
